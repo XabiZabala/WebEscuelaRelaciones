@@ -1,0 +1,54 @@
+﻿@model IEnumerable<WebEscuelaRelaciones.Models.Alumno>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a class="btn btn-success"  asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                <!--Html.DisplayNameFor(model => model.Apellido)-->
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.Apellido)</a>
+            </th>
+            <th>
+                <!--Html.DisplayNameFor(model => model.FechaInscripcion)-->
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]">@Html.DisplayNameFor(model => model.FechaInscripcion)</a>
+
+            </th>
+            <th style="border:2px solid black"   class="text-center">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Apellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaInscripcion)
+            </td>
+            <td>
+                <a class="btn btn-success"  asp-action="Edit" asp-route-id="@item.AlumnoID">Editar</a> 
+                <a class="btn btn-primary"  asp-action="Details" asp-route-id="@item.AlumnoID">Detalles</a> 
+                <a class="btn btn-danger"   asp-action="Delete" asp-route-id="@item.AlumnoID">Eliminar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<p>
+    <a class="btn btn-success" asp-controller="Home" asp-action="Index">Volver</a>
+</p>
