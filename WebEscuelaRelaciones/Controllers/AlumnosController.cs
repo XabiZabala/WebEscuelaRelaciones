@@ -27,13 +27,37 @@ namespace WebEscuelaRelaciones.Controllers
         }*/
 
         //Index que muestra un listado ordenado 
-        public async Task<IActionResult> Index(string sortOrder)
+        //El parámetro searchString corresponde al name recibido SearchString
+        //Fijarse que es el mismo nombre que el name pero con la primera letra en minúsculas
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter,
+                string searchString, int? pageNumber)
         {
+            ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
             /*Selecciona todos los registros de alumnos*/
             var alumnos = from s in _context.Alumnos
                            select s;
+
+            //Para el cuadro de búsqueda
+            //Hace un listado con los alumnos que el nombre o apellido contengan
+            //el texto introducido a buscar
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                alumnos = alumnos.Where(s => s.Apellido.Contains(searchString)
+                                       || s.Nombre.Contains(searchString));
+            }
 
             switch (sortOrder)
             {
@@ -50,7 +74,11 @@ namespace WebEscuelaRelaciones.Controllers
                     alumnos = alumnos.OrderBy(s => s.Apellido);
                     break;
             }
-            return View(await alumnos.AsNoTracking().ToListAsync());
+
+            int pageSize = 3;
+            return View(await Paginacion.ListaPaginacion<Alumno>.CreateAsync(alumnos.AsNoTracking(), pageNumber ?? 1, pageSize));
+
+            //return View(await alumnos.AsNoTracking().ToListAsync());
         }
 
 
