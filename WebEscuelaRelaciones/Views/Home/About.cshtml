@@ -1,0 +1,38 @@
+﻿@model IEnumerable<WebEscuelaRelaciones.Models.EscuelaViewModel.DatosInscripciones>
+
+@{
+    ViewData["Title"] = "Stadisticas de Alumnos";
+}
+
+<h2 class="text-center">Estadisticas de Alumnos</h2>
+
+
+<div class="text-center">
+    <table id="tabla-estadisticas" >
+        <tr id="fila-tabla-estadisticas" >
+            <th>
+               Fecha Inscripción
+            </th>
+            <th class="text-center">
+                Alumnos
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaInscripcion)
+                </td>
+                <td class="text-center">
+                    @item.ContadorAlumno
+                </td>
+            </tr>
+        }
+    </table>
+    <br />
+    <p>
+        <a class="btn btn-dark" asp-controller="Home" asp-action="Index">Volver</a>
+    </p>
+
+</div>
